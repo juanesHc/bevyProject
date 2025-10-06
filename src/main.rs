@@ -10,6 +10,7 @@ use estructuras::collition::Collition;
 use funciones::goat_movement::movement;
 use funciones::detect_collition::collision_detection_system;
 use funciones::plant_color_change::plant_color_changes;
+use funciones::detect_collition::teleport_to_nearest_plant;
 
 
 fn main() {
@@ -19,6 +20,7 @@ fn main() {
         .add_event::<Collition>()
         .add_startup_system(setup)
         .add_system(movement)
+        .add_system(teleport_to_nearest_plant)
         .add_system(collision_detection_system)
         .add_system(plant_color_changes)
         .run();
