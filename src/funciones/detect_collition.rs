@@ -42,3 +42,28 @@ fn is_colliding(goat_transform: &Transform, plant_transform: &Transform) -> bool
     
     collision_x && collision_y
 }
+
+pub fn teleport_to_nearest_plant(
+    input: Res<Input<KeyCode>>,
+    mut goat_query: Query<&mut Transform, With<Goat>>,
+    plant_query: Query<&Transform, (With<Plant>, Without<Goat>)>,
+) {
+    if input.just_pressed(KeyCode::E) {
+        let mut goat_transform = match goat_query.get_single_mut() {
+            Ok(transform) => transform,
+            Err(_) => return,
+        };
+
+        let goat_position = goat_transform.translation;
+
+        let nearest_plant = plant_query.iter()
+            .min_by_key(|plant_transform| {
+                let distance = (plant_transform.translation - goat_position).length_squared();
+                (distance * 1000.0) as i32 
+            });
+
+        if let Some(nearest_plant) = nearest_plant {
+            goat_transform.translation = nearest_plant.translation;
+        }
+    }
+}
