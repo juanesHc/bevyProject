@@ -8,9 +8,8 @@ use estructuras::goat::Goat;
 use estructuras::plants::Plant;
 use estructuras::collition::Collition;
 use funciones::goat_movement::movement;
-use funciones::detect_collition::collision_detection_system;
 use funciones::plant_color_change::plant_color_changes;
-use funciones::detect_collition::teleport_to_nearest_plant;
+use funciones::detect_collition::check_collisions;
 
 
 fn main() {
@@ -20,15 +19,13 @@ fn main() {
         .add_event::<Collition>()
         .add_startup_system(setup)
         .add_system(movement)
-        .add_system(teleport_to_nearest_plant)
-        .add_system(collision_detection_system)
         .add_system(plant_color_changes)
+        .add_system(check_collisions)
         .run();
 }
 
 fn setup(mut commands: Commands) {
-   
-    let plantas:u32=10;
+
 
     commands.spawn(Camera2dBundle::default());
 
@@ -45,9 +42,9 @@ fn setup(mut commands: Commands) {
 
         let mut rng = rand::thread_rng();
 
-        for  i in 1..plantas {
+        for  _ in 1..19 {
         
-        let pos_x: f32 = rng.gen_range(-300.0..=300.0); 
+        let pos_x: f32 = rng.gen_range(-400.0..=400.0); 
         let pos_y: f32 = rng.gen_range(-300.0..=300.0); 
 
         let size_x: f32 = rng.gen_range(30.0..=80.0); 
@@ -61,7 +58,7 @@ fn setup(mut commands: Commands) {
             },
             transform: Transform::from_xyz(pos_x, pos_y, 0.0),
             ..Default::default()
-        }).insert(Plant{id:i});
+        }).insert(Plant);
     }
 }
 
