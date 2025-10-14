@@ -1,3 +1,4 @@
-pub struct Collition {
-    pub plant_id: u32,
+use bevy::prelude::*;
+pub struct Collition{
+    pub plant_position: Vec3,
 }
